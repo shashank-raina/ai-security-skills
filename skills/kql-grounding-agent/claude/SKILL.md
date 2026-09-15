@@ -31,8 +31,8 @@ A failed lookup and a documented absence are different things. A timeout, a 403,
 ## Mandatory workflow (in order, no skipping)
 
 1. **Clarify intent.** Goal, query surface (Sentinel workspace vs Defender XDR vs both), time window, stated constraints. Ask only if genuinely ambiguous; otherwise state your interpretation as an assumption.
-2. **Resolve candidate tables.** List tables you believe are relevant; note which surface each belongs to. Still hypothetical.
-3. **Verify schemas.** If no fetch, browse or documentation tool is available in this session, stop here: say verification is not possible, hand over the reference URLs so the user can check the schema themselves, and do not write the query. What you remember about these schemas is not a substitute for the lookup, and a query from recall presented as grounded is the failure this skill exists to prevent. Otherwise, fetch each table's reference page. Extract the exact columns you intend to use; record the URL. On 404: check the index pages for the correct name. If the name is in the index but the page is missing, treat the schema as unpublished, not wrong. If it is nowhere, ask whether it's a custom `*_CL` table and request its schema from the user. Custom tables, workspace functions and unpublished preview tables proceed only on user-supplied schema, marked environment-dependent.
+2. **Resolve candidate tables, and sort them before anything leaves the tenant.** List tables you believe are relevant; note which surface each belongs to. Two piles: **published** tables Microsoft documents, which go to step 3, and **tenant-specific** names — anything ending `_CL`, workspace functions, any table the user calls their own — which never leave, not even to check whether they are documented, because the name is sent either way. Those go straight to the schema tab or a `getschema` run, with a redacted name if the real one is sensitive. If you cannot tell which pile a name is in, ask rather than guessing outward. Both piles stay hypothetical until verified.
+3. **Verify published schemas.** If no fetch, browse or documentation tool is available in this session, stop here: say verification is not possible, hand over the reference URLs so the user can check the schema themselves, and do not write the query. What you remember about these schemas is not a substitute for the lookup, and a query from recall presented as grounded is the failure this skill exists to prevent. Otherwise, fetch each table's reference page. Extract the exact columns you intend to use; record the URL. On 404: check the index pages for the correct name. If the name is in the index but the page is missing, treat the schema as unpublished, not wrong. If it is nowhere, ask whether it's a custom `*_CL` table and request its schema from the user. Custom tables, workspace functions and unpublished preview tables proceed only on user-supplied schema, marked environment-dependent.
 4. **Retrieve prior art, where you can.** Query KQL Search MCP and the Azure-Sentinel repo for the verified tables + goal keywords. Search on table names and generic technique keywords only — this step leaves the tenant. Account names, UPNs, hostnames, IP addresses, internal domains, ticket references and anything pasted from the user's own data stay out of the search string. Custom identifiers are not safe to send either: a `*_CL` table or a workspace function can carry a project, a client or a case in the name, so never look one up externally — verify it from the schema tab or a `getschema` run, with a redacted name where even that is sensitive. Re-verify any columns the found queries use before adapting — community queries can be stale. This step depends on a search capability you may not have: if none is available, say the prior-art step was skipped and compose from the verified schemas alone. Never cite an adapted query you did not actually retrieve.
 5. **Compose.** Use only verified identifiers. Style: time filter first, high-selectivity `where` early, `has`/`has_any` over `contains` for whole-term matches but never where substring semantics are needed — inside a URL, path, command line or domain fragment `contains` is the correct operator, and say which you chose — explicit join kinds, explicit final `project`, `//` comments on non-obvious logic, entity-mappable columns surfaced for detections.
 6. **Self-check** the final query line by line before returning:
@@ -47,10 +47,16 @@ A failed lookup and a documented absence are different things. A timeout, a 403,
 
 ## Output format
 
+Two shapes, and the first is not always available.
+
+**With a query:**
+
 - **Query** — KQL in a code block, targeting the confirmed surface.
 - **Sources verified** — each table with its schema URL; each adapted query with its link.
 - **Assumptions & environment dependencies.**
 - **Notes** (optional) — performance, tuning, surface-portability caveats.
+
+**When verification did not get there** — no lookup capability, a lookup that failed, an index that does not list the table, or a tenant-specific table whose schema the user could not supply — there is no **Query** section at all. Do not leave it empty and do not fill it with something unverified. Say what you were verifying, what you checked, what came back, which of those four it was, and what would unblock it: a documentation tool, the reference URLs to open, or the schema tab output.
 
 ## Edge cases
 

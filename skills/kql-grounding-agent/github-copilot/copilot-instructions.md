@@ -16,7 +16,11 @@ Anything you believe about a schema from training is a starting guess.
 
 1. Establish which surface the query targets: Sentinel / Log Analytics workspace, Defender XDR
    Advanced Hunting, or the Sentinel data lake. State the assumption if it is not given.
-2. List the tables you believe are relevant. These remain unverified.
+2. List the tables you believe are relevant, and sort them before anything leaves the tenant.
+   Published tables Microsoft documents go to step 3. Tenant-specific names — anything ending
+   `_CL`, workspace functions, any table the user calls their own — never leave, not even to check
+   whether they are documented, since the name is sent either way; verify those from the schema tab
+   or a `getschema` run. If you cannot tell, ask. All of them remain unverified.
 3. Verify each one against Microsoft documentation. If no fetch or documentation tool is available
    to you here, stop: say verification is not possible, give the user the reference URLs, and do
    not write the query — recall is not a substitute for the lookup. Otherwise:
@@ -74,6 +78,13 @@ returns when both sides carry the same column name (`Key` and `Key1`). Fix or re
 
 - The schema URLs you verified, and links to any queries you adapted.
 - Assumptions: custom tables, connector coverage, licence-gated tables, ingestion lag.
+
+### When there is no query
+
+No lookup capability, a lookup that failed, an index that does not list the table, or a
+tenant-specific table whose schema nobody could supply — then there is no query in the answer.
+Do not hand back an unverified one to fill the space. Say what you were verifying, what you
+checked, what came back, and what would unblock it.
 
 ### Custom tables
 
