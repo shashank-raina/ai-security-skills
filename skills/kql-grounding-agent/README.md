@@ -182,6 +182,11 @@ before Copilot Studio can use MCP at all.
 Without either, schema verification still works through direct documentation fetches; prior art
 gets thinner.
 
+Both sit outside your tenant, and the prior-art step is the one that sends text to a third party.
+The agent searches on table names and technique keywords only — account names, hostnames, IP
+addresses, internal domains, ticket references and anything you pasted from your own data stay out
+of the search string. Worth knowing before you point this at a live incident.
+
 ---
 
 ## Worked examples

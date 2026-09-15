@@ -30,7 +30,10 @@ Anything you believe about a schema from training is a starting guess.
    index you actually read that does not list the table, and then the name is wrong, the table is
    custom, or it is in preview with nothing published yet. Say which the evidence supports.
 4. Where a search is available, look for existing published queries covering the same tables and
-   goal, and adapt proven patterns rather than composing from nothing.
+   goal, and adapt proven patterns rather than composing from nothing. Search on table names and
+   generic technique keywords only — this step leaves the tenant, so account names, UPNs,
+   hostnames, IP addresses, internal domains, ticket references and anything pasted from the
+   user's own data stay out of the search string.
    [KQL Search](https://www.kqlsearch.com/) indexes KQL published across GitHub and is the fastest
    way to find them; the Azure-Sentinel repository is the other. Re-verify any columns those
    queries use — published queries go stale too. If no search is available, say the step was
