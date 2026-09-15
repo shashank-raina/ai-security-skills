@@ -22,7 +22,63 @@ Microsoft security schemas make this sharper than most. Retired table names carr
 
 The fix is not a better prompt. It is refusing to let the model answer until it has checked.
 
-## Using these
+## How to actually use this
+
+These are not programs and there is nothing to run. Each one is **standing context** — text the
+model reads before it answers. You put the text where your platform looks for it, then ask your
+normal question. Nothing to invoke: type *"write me a KQL query for failed sign-ins"* and the
+rules have already shaped the reply.
+
+Two of the four routes are a file copy. The other two are a short build.
+
+### Claude — copy one file
+
+```
+~/.claude/skills/kql-grounded-queries/SKILL.md
+```
+
+Copy [`skills/kql-grounding-agent/claude/SKILL.md`](skills/kql-grounding-agent/claude/SKILL.md)
+there. **The folder name must be `kql-grounded-queries`** to match the skill's frontmatter. Claude
+loads it automatically and triggers on anything KQL-shaped — including questions that never use
+the word "KQL", like *"find agents on laptops in Defender"*.
+
+On claude.ai or Claude Desktop rather than the CLI, paste the file's contents into a Project's
+custom instructions instead. Same rules, slightly less automatic.
+
+### GitHub Copilot — copy one file
+
+```
+.github/copilot-instructions.md        in a repository
+%USERPROFILE%/copilot-instructions.md  for everything you do
+```
+
+Copy
+[`skills/kql-grounding-agent/github-copilot/copilot-instructions.md`](skills/kql-grounding-agent/github-copilot/copilot-instructions.md).
+It applies to every Copilot Chat conversation in that scope, with nothing to trigger. In SSMS and
+some other hosts the repository-level file needs enabling once in Copilot Chat options.
+
+### Copilot Studio — build an agent (about twenty minutes)
+
+Not a file copy. You create an agent, paste the supplied instructions into it, attach the
+Microsoft Learn Docs and KQL Search MCP servers as tools, and publish it. Your users then talk to
+*that agent* rather than to generic Copilot. Full steps, and the two settings that silently break
+it, are in [`skills/kql-grounding-agent/copilot-studio/`](skills/kql-grounding-agent/copilot-studio).
+
+### Microsoft 365 Copilot — build a declarative agent
+
+Also a build. Agent Builder or the Agents Toolkit, with the instructions pasted in, web search
+scoped to the documentation, and ideally a Learn MCP plugin attached. Read the limitation note
+first — without that plugin this version searches rather than fetches, which is a weaker promise.
+Steps in [`skills/kql-grounding-agent/m365-copilot/`](skills/kql-grounding-agent/m365-copilot).
+
+### One thing people miss
+
+On Claude and Copilot Studio the **MCP servers are a separate setup step**. Connect
+[KQL Search](https://www.kqlsearch.com/) and the Microsoft Learn Docs MCP server, or the agent
+falls back to plain web fetches: schema verification mostly still works, but the prior-art step
+gets thin. Each skill's README lists what to connect.
+
+---
 
 Each skill folder leads with the method — the ordered steps and the checks that make it work —
 then offers that method as a file per platform. The Claude version is canonical in every case,
