@@ -10,8 +10,8 @@ sources come from capabilities and plugins.
 
 The Claude and Copilot Studio versions **fetch a documentation page**. A declarative agent's web
 search capability **searches an index**, scoped to sites you nominate. Those are not the same
-guarantee. Search returns what looks relevant; a fetch returns the schema page or a 404, and the
-404 is itself the useful answer.
+guarantee. Search returns what looks relevant; a fetch returns the schema page itself, or lets you
+read the index that settles whether the table exists at all.
 
 You can close most of that gap by attaching a plugin built on the Microsoft Learn MCP server,
 which turns lookups back into real tool calls. Without one, treat this version as a strong prompt

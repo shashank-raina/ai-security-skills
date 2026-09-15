@@ -72,11 +72,11 @@ Index pages                https://learn.microsoft.com/azure/azure-monitor/refer
 Note the casing: Log Analytics uses the table's own casing, Defender XDR lowercases it. The exact
 column list is read off the page and recorded, along with the URL.
 
-**A 404 is information — a failed lookup is not.** A timeout, a 403 or a URL template that has
-moved says nothing about the schema, so the agent retries, tries the index, and then reports the
-lookup as failed. Only a page that comes back without the table is evidence, and then the name is
-wrong, the table is custom, or it is in preview with nothing published yet. Any of those three is
-more useful than a query.
+**A 404 is not a verdict.** Learn serves one for a slug it does not recognise as readily as for a
+table that does not exist, so a 404 on its own — like a timeout or a 403 — means the lookup
+failed, and the agent says so. What settles it is the index page: a schema index that does not
+list your table is evidence, and then the name is wrong, the table is custom, or it is in preview
+with nothing published yet. Any of those three is more useful than a query.
 
 ### 4. Retrieve prior art before composing anything
 
@@ -152,7 +152,8 @@ Same method, four delivery mechanisms.
 | **Microsoft 365 Copilot** | [`m365-copilot/`](m365-copilot/) | Declarative agent using scoped web search, which searches rather than fetches. Read the limitation note before relying on it. |
 
 The difference that matters between them is step 3. Claude, Copilot Studio and GitHub Copilot can
-retrieve a specific documentation page, so a missing table produces a 404 and the agent knows it.
+retrieve a specific documentation page and the schema index behind it, which is what lets a
+missing table be established rather than guessed at.
 A declarative agent relying on scoped web search only gets what an index returns, which is a
 weaker promise — worth understanding before telling anyone the output is grounded. Attaching a
 Microsoft Learn MCP plugin closes most of that gap.
@@ -202,8 +203,10 @@ browse. The corpus was already good; the MCP server is what let an agent reach i
 - **Preview tables with no published schema.** Nothing can be verified against documentation that
   does not exist. The agent asks you for the schema — the portal's schema tab, or a `getschema`
   run — and stops if you do not have it. Ask and it will produce a `column_ifexists()` version,
-  but that is a diagnostic rather than a query to keep: a wrong column name resolves quietly to
-  the default, so the query runs, returns nothing, and reads as a clean negative.
+  but that is a diagnostic rather than a query to keep: a column that is not there resolves
+  silently to the default for every row, so a filter on it matches nothing or everything and a
+  `summarize` collapses into one bucket. It runs, and what comes back is a false negative wearing
+  the shape of a real result.
 - **Custom `*_CL` tables and workspace functions.** The agent asks for the schema rather than
   assuming one, which means somebody still has to know it.
 - **Documentation is not your tenant.** Verifying that a table exists says nothing about whether

@@ -75,7 +75,7 @@ EntraAgentIdentities
 | top 10 by Agents
 ```
 
-The `column_ifexists()` guard means a renamed column degrades to an empty string instead of breaking the query, and the whole thing is flagged as environment-dependent and requiring validation in-tenant.
+The `column_ifexists()` guard means a renamed column degrades to an empty string instead of breaking the query, and the whole thing is flagged as environment-dependent and requiring validation in-tenant. Read the output with that in mind: an empty string for every row is indistinguishable from a real empty value, so a filter on that column matches nothing or everything and a `summarize` on it collapses into one bucket. The query runs either way, which is what makes this a diagnostic rather than something to put in a workbook.
 
 **What grounding contributes:** honesty about the boundary. A query marked "verify this against your own schema tab" is worth more than one presented with the same confidence as a verified one.
 
