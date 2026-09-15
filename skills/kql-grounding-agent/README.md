@@ -127,12 +127,20 @@ references columns that were renamed underneath it.
 
 ## Getting it
 
-Same rules, two delivery mechanisms.
+Same method, four delivery mechanisms.
 
-| Platform | File | Status |
+| Platform | Where it goes | How it verifies |
 |---|---|---|
-| **Claude** (Claude Code, claude.ai, Claude Desktop) | [`claude/SKILL.md`](claude/SKILL.md) | **In daily use.** Canonical version. |
-| **GitHub Copilot** | [`github-copilot/copilot-instructions.md`](github-copilot/copilot-instructions.md) | Adaptation. Format follows Microsoft's documented custom-instructions feature; behaviour not yet validated to the same standard. |
+| **Claude** (Claude Code, claude.ai, Desktop) | [`claude/SKILL.md`](claude/SKILL.md) | Fetches the schema page. **In daily use — canonical version.** |
+| **Copilot Studio** | [`copilot-studio/`](copilot-studio/) | Agent instructions plus MCP tools, so lookups are real tool calls. Steps from current documentation; not yet built end to end. |
+| **GitHub Copilot** | [`github-copilot/copilot-instructions.md`](github-copilot/copilot-instructions.md) | Fetches documentation URLs. Format per Microsoft's custom-instructions feature; not yet validated. |
+| **Microsoft 365 Copilot** | [`m365-copilot/`](m365-copilot/) | Declarative agent using scoped web search, which searches rather than fetches. Read the limitation note before relying on it. |
+
+The difference that matters between them is step 3. Claude, Copilot Studio and GitHub Copilot can
+retrieve a specific documentation page, so a missing table produces a 404 and the agent knows it.
+A declarative agent relying on scoped web search only gets what an index returns, which is a
+weaker promise — worth understanding before telling anyone the output is grounded. Attaching a
+Microsoft Learn MCP plugin closes most of that gap.
 
 **Claude:** the folder must match the skill's frontmatter name — copy `claude/SKILL.md` to
 `kql-grounded-queries/SKILL.md` in your skills directory. It activates on any KQL request,
@@ -140,6 +148,11 @@ including ones that never use the word "KQL".
 
 **GitHub Copilot:** place the file at `.github/copilot-instructions.md` in your repository, or at
 `%USERPROFILE%/copilot-instructions.md` for user-level preferences that apply everywhere.
+
+**Copilot Studio and Microsoft 365 Copilot** are agent-building platforms rather than instruction
+files. Each folder carries the setup steps and the instruction text to paste in — including the
+gotchas that stop the verification working, such as generative orchestration needing to be on
+before Copilot Studio can use MCP at all.
 
 ### Connections worth adding
 

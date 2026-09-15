@@ -10,7 +10,7 @@ Everything here is used on real work. The skills are plain Markdown instruction 
 
 | Skill | What it does | Platforms |
 |---|---|---|
-| [**kql-grounding-agent**](skills/kql-grounding-agent) | Writes KQL for Sentinel, Log Analytics and Defender XDR without inventing table or column names. Verifies every identifier against Microsoft documentation before composing anything, and stops instead of guessing when it cannot. | Claude · GitHub Copilot |
+| [**kql-grounding-agent**](skills/kql-grounding-agent) | Writes KQL for Sentinel, Log Analytics and Defender XDR without inventing table or column names. Verifies every identifier against Microsoft documentation before composing anything, and stops instead of guessing when it cannot. | Claude · Copilot Studio · GitHub Copilot · M365 Copilot |
 
 More will land here as they prove themselves in use.
 
