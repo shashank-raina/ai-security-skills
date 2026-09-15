@@ -185,7 +185,9 @@ gets thinner.
 Both sit outside your tenant, and the prior-art step is the one that sends text to a third party.
 The agent searches on table names and technique keywords only — account names, hostnames, IP
 addresses, internal domains, ticket references and anything you pasted from your own data stay out
-of the search string. Worth knowing before you point this at a live incident.
+of the search string. Your own custom identifiers count too: a `*_CL` table or a workspace function
+can carry a project or a client in its name, so the agent never looks those up externally and asks
+you for the schema instead. Worth knowing before you point this at a live incident.
 
 ---
 
