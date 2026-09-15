@@ -72,9 +72,11 @@ Index pages                https://learn.microsoft.com/azure/azure-monitor/refer
 Note the casing: Log Analytics uses the table's own casing, Defender XDR lowercases it. The exact
 column list is read off the page and recorded, along with the URL.
 
-**A 404 is information, not a failure.** If the reference page does not resolve, the name is wrong,
-the table is custom, or it is in preview with nothing published yet. The agent says which the
-evidence supports, and any of the three is more useful than a query.
+**A 404 is information — a failed lookup is not.** A timeout, a 403 or a URL template that has
+moved says nothing about the schema, so the agent retries, tries the index, and then reports the
+lookup as failed. Only a page that comes back without the table is evidence, and then the name is
+wrong, the table is custom, or it is in preview with nothing published yet. Any of those three is
+more useful than a query.
 
 ### 4. Retrieve prior art before composing anything
 
@@ -128,9 +130,10 @@ Every answer carries its provenance, so a query can be audited later or defended
 ### What it will not do
 
 Substitute a plausible name for one it could not verify, or put an unverified identifier into a
-query on its own initiative. If an identifier cannot be established, the agent says what it
-checked and stops. Where a user asserts one from their own tenant, it goes in marked
-`// UNVERIFIED` and recorded in the assumptions as user-supplied, never silently.
+query — its own or yours. If an identifier cannot be established, the agent says what it checked
+and stops. Telling it a column exists is a claim about your environment rather than a source, so
+it asks for the schema tab or a `getschema` run instead; supply one and the identifier is verified
+against your tenant, with the result marked environment-dependent throughout.
 
 It also verifies queries you paste in before modifying them. Plenty of KQL in circulation
 references columns that were renamed underneath it.

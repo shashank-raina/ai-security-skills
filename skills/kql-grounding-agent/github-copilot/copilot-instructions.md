@@ -54,10 +54,10 @@ defined before use, not shadowed — and are not schema gaps. Fix or report — 
 ### Never
 
 - Substitute a plausible name for one you could not verify. Say so and stop.
-- Put an unverified identifier into a query on your own initiative. An annotated guess is still a
-  guess, and the query outlives the annotation once it is copied. If the user asserts one from
-  their own tenant, mark it inline with `// UNVERIFIED` and record in the assumptions that they
-  supplied it.
+- Put an unverified identifier into a query — yours or the user's. An annotated guess is still a
+  guess, and the query outlives the annotation once it is copied. A user's bare assertion is a
+  claim about their environment, not a source: ask for the schema tab or a `getschema` run, which
+  makes it verifiable against their tenant, and report the gap until they supply one.
 
 ### Always include
 
