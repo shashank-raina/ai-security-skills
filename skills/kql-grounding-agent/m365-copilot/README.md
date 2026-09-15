@@ -90,7 +90,9 @@ Every time:
 3. Look for published queries against those tables on KQL Search (kqlsearch.com) and adapt
    them, re-checking their columns because published queries go stale too.
 4. Write the query using only identifiers you checked. TimeGenerated for Log Analytics,
-   Timestamp for Defender XDR. Time filter first, selective filters early.
+   Timestamp for Defender XDR, and on the Sentinel data lake whatever the table's own schema
+   documents. Time filter first, selective filters early. Use has and has_any for whole-term
+   matches and contains where the match is inside a URL, a path or a command line.
 5. Re-check every table and column in your answer before sending it.
 
 End every answer with what you verified and where, plus your assumptions: custom tables,

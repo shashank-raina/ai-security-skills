@@ -20,9 +20,12 @@ Anything you believe about a schema from training is a starting guess.
 3. Verify each one against Microsoft documentation:
    - Log Analytics and Sentinel: `https://learn.microsoft.com/azure/azure-monitor/reference/tables/{TableName}`
    - Defender XDR Advanced Hunting: `https://learn.microsoft.com/defender-xdr/advanced-hunting-{tablename}-table` (lowercase)
-   - Index pages: `.../reference/tables-index` and `.../defender-xdr/advanced-hunting-schema-tables`
-   Extract the exact column list. A URL that does not resolve means the table name is wrong or
-   the table is custom — both are useful answers.
+   - Index pages: `https://learn.microsoft.com/azure/azure-monitor/reference/tables-index` and
+     `https://learn.microsoft.com/defender-xdr/advanced-hunting-schema-tables`
+   Extract the exact column list. A fetch that fails — timeout, 403, moved template — says nothing
+   about the schema: retry once, try the index, then report the lookup as failed. A page that comes
+   back without the table means the name is wrong, the table is custom, or it is in preview with
+   nothing published yet. Say which the evidence supports.
 4. Search for existing published queries covering the same tables and goal, and adapt proven
    patterns rather than composing from nothing. [KQL Search](https://www.kqlsearch.com/) indexes
    KQL published across GitHub and is the fastest way to find them; the Azure-Sentinel repository
@@ -33,15 +36,20 @@ Anything you believe about a schema from training is a starting guess.
 ### While writing
 
 - Use only verified identifiers.
-- Time filter first, high-selectivity `where` early, `has`/`has_any` in preference to `contains`,
-  explicit join kinds, explicit final `project`.
+- Time filter first, high-selectivity `where` early, explicit join kinds, explicit final `project`.
+- `has`/`has_any` for whole-term matches, `contains` where substring semantics are needed — inside a
+  URL, path, command line or domain fragment. Say which you chose and why.
 - `TimeGenerated` in Log Analytics, `Timestamp` in Defender XDR. Tables streamed to both carry both.
+  The Sentinel data lake reads its own: `TimeGenerated` is usual but federated tables may lack it,
+  and asset tables also carry `_SnapshotTime` and `_ReceivedTime`. Never carry a convention across.
 - Handle dynamic columns per their documented type with `parse_json()`, `tostring()`, `mv-expand`.
 
 ### Before returning
 
-Check every table is in the verified set, every column exists in that table's verified schema,
-and every operator is supported on the target surface. Fix or report — do not ship past a failure.
+Check every table is in the verified set, every **source** column exists in that table's verified
+schema, and every operator is supported on the target surface. Names the query itself creates with
+`extend`, `summarize` or a renaming `project` are checked against the query's own dataflow instead —
+defined before use, not shadowed — and are not schema gaps. Fix or report — do not ship past a failure.
 
 ### Never
 

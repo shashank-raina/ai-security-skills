@@ -20,13 +20,13 @@ You are authoring KQL for Microsoft Sentinel, Log Analytics, or Defender XDR Adv
 
 | Source | How to access |
 |---|---|
-| Log Analytics / Sentinel table schemas | `web_fetch` the deterministic URL: `https://learn.microsoft.com/en-us/azure/azure-monitor/reference/tables/{TableName}` (correct casing, e.g. `SigninLogs`). Table discovery index: `.../reference/tables-index`. The **Microsoft Learn MCP server**, if connected, may also be used for grounded doc search. |
-| Defender XDR Advanced Hunting schemas | `web_fetch`: `https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-{tablename}-table` (lowercase). Table list: `.../defender-xdr/advanced-hunting-schema-tables`. |
+| Log Analytics / Sentinel table schemas | `web_fetch` the deterministic URL: `https://learn.microsoft.com/en-us/azure/azure-monitor/reference/tables/{TableName}` (correct casing, e.g. `SigninLogs`). Table discovery index: `https://learn.microsoft.com/en-us/azure/azure-monitor/reference/tables-index`. The **Microsoft Learn MCP server**, if connected, may also be used for grounded doc search. |
+| Defender XDR Advanced Hunting schemas | `web_fetch`: `https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-{tablename}-table` (lowercase). Table list: `https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-schema-tables`. |
 | Community query corpus | **KQL Search MCP** (`kqlsearch.com/mcp`) if connected — search by table, keyword, technique. If not connected, tell the user they can add it as a custom connector, and fall back to `web_search` scoped conceptually to kqlsearch.com and community blogs. |
 | Official Microsoft queries | Azure-Sentinel GitHub repo. Use `web_search` (e.g. `Azure-Sentinel github EmailUrlInfo hunting query`) then `web_fetch` the raw file. Key paths: `Detections/`, `Hunting Queries/`, `Solutions/{Name}/Analytic Rules/`. Rule YAML declares `requiredDataConnectors`, tactics, techniques. |
 | KQL language reference | `web_fetch` `https://learn.microsoft.com/en-us/kusto/query/{operator-name}` if unsure an operator/function exists or is supported in Log Analytics (some Kusto features are ADX-only). |
 
-Fetching a URL that 404s is *signal*, not failure. It means one of three things: the name is wrong, the table is custom to the tenant, or the table is in preview with no reference published yet. Say which the evidence supports; where nothing distinguishes them, report the schema as unavailable rather than picking one.
+A failed fetch and a documented absence are different things: a timeout, a 403 or a moved URL template tells you nothing about the schema, so retry once, try the index page, and if it still fails report the lookup as failed rather than drawing a conclusion. A page that is retrieved and does not have the table is *signal*, not failure. It means one of three things: the name is wrong, the table is custom to the tenant, or the table is in preview with no reference published yet. Say which the evidence supports; where nothing distinguishes them, report the schema as unavailable rather than picking one.
 
 ## Mandatory workflow (in order, no skipping)
 
@@ -34,13 +34,14 @@ Fetching a URL that 404s is *signal*, not failure. It means one of three things:
 2. **Resolve candidate tables.** List tables you believe are relevant; note which surface each belongs to. Still hypothetical.
 3. **Verify schemas.** Fetch each table's reference page. Extract the exact columns you intend to use; record the URL. On 404: check the index pages for the correct name. If the name is in the index but the page is missing, treat the schema as unpublished, not wrong. If it is nowhere, ask whether it's a custom `*_CL` table and request its schema from the user. Custom tables, workspace functions and unpublished preview tables proceed only on user-supplied schema, marked environment-dependent.
 4. **Retrieve prior art.** Query KQL Search MCP and the Azure-Sentinel repo for the verified tables + goal keywords. Re-verify any columns the found queries use before adapting — community queries can be stale.
-5. **Compose.** Use only verified identifiers. Style: time filter first, high-selectivity `where` early, `has`/`has_any` over `contains` where possible, explicit join kinds, explicit final `project`, `//` comments on non-obvious logic, entity-mappable columns surfaced for detections.
+5. **Compose.** Use only verified identifiers. Style: time filter first, high-selectivity `where` early, `has`/`has_any` over `contains` for whole-term matches but never where substring semantics are needed — inside a URL, path, command line or domain fragment `contains` is the correct operator, and say which you chose — explicit join kinds, explicit final `project`, `//` comments on non-obvious logic, entity-mappable columns surfaced for detections.
 6. **Self-check** the final query line by line before returning:
    - Every table is in the verified set
-   - Every column exists in its table's verified schema (watch XDR-vs-Sentinel column differences for dual-surface tables)
+   - Every **source** column exists in its table's verified schema (watch XDR-vs-Sentinel column differences for dual-surface tables)
+   - Every name the query itself creates — `extend`, `summarize`, a renaming `project`, a join prefix — is defined before use in the query's own dataflow, and not shadowed later. These need no external verification; do not report them as gaps
    - Every operator/function is supported on the target surface
    - Dynamic columns handled per documented type (`parse_json()`, `tostring()`, `mv-expand`)
-   - Correct timestamp column: `TimeGenerated` (Log Analytics) vs `Timestamp` (Defender XDR)
+   - Correct timestamp column for the surface, never carried across: `TimeGenerated` (Log Analytics) vs `Timestamp` (Defender XDR); the Sentinel data lake reads its own — `TimeGenerated` is usual there but federated tables may lack it, and asset tables also carry `_SnapshotTime` and `_ReceivedTime`, so read it off the schema like any other column
 
    Any failure: fix and re-check, or report the gap instead of shipping.
 

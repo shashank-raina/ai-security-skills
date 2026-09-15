@@ -65,8 +65,8 @@ time:
 ```
 Log Analytics / Sentinel   https://learn.microsoft.com/azure/azure-monitor/reference/tables/{TableName}
 Defender XDR               https://learn.microsoft.com/defender-xdr/advanced-hunting-{tablename}-table
-Index pages                .../reference/tables-index
-                           .../defender-xdr/advanced-hunting-schema-tables
+Index pages                https://learn.microsoft.com/azure/azure-monitor/reference/tables-index
+                           https://learn.microsoft.com/defender-xdr/advanced-hunting-schema-tables
 ```
 
 Note the casing: Log Analytics uses the table's own casing, Defender XDR lowercases it. The exact
@@ -86,16 +86,26 @@ the same way training data does.
 
 ### 5. Compose using only verified identifiers
 
-Time filter first. High-selectivity `where` early. `has` / `has_any` in preference to `contains`.
-Explicit join kinds. An explicit final `project`. `TimeGenerated` on Log Analytics, `Timestamp`
-on Defender XDR. Dynamic columns handled per their documented type with `parse_json()`,
-`tostring()` and `mv-expand`.
+Time filter first. High-selectivity `where` early. Explicit join kinds. An explicit final
+`project`. Dynamic columns handled per their documented type with `parse_json()`, `tostring()`
+and `mv-expand`.
+
+`has` and `has_any` index whole terms and are faster, but they are not a drop-in replacement for
+`contains` — anything matching inside a URL, a path or a command line needs substring semantics,
+and the agent says which it used.
+
+The timestamp column belongs to the surface and is never carried across: `TimeGenerated` on Log
+Analytics, `Timestamp` on Defender XDR, and on the data lake whatever the table documents —
+`TimeGenerated` is usual there but federated tables may lack it, and asset tables also carry
+`_SnapshotTime` and `_ReceivedTime`.
 
 ### 6. Self-check line by line before returning
 
 - Every table is in the verified set
-- Every column exists in that table's verified schema, watching for Defender-versus-Sentinel
-  differences on tables that exist in both
+- Every **source** column exists in that table's verified schema, watching for
+  Defender-versus-Sentinel differences on tables that exist in both
+- Every name the query creates for itself — `extend`, `summarize`, a renaming `project` — is
+  defined before it is used and not shadowed later. Those are dataflow checks, not schema gaps
 - Every operator is supported on the target surface
 - The correct timestamp column is used throughout
 
@@ -187,8 +197,10 @@ browse. The corpus was already good; the MCP server is what let an agent reach i
 ## Known limits
 
 - **Preview tables with no published schema.** Nothing can be verified against documentation that
-  does not exist. These get flagged as environment-dependent, with columns guarded by
-  `column_ifexists()`. That is a hedge, not grounding.
+  does not exist. The agent asks you for the schema — the portal's schema tab, or a `getschema`
+  run — and stops if you do not have it. Ask and it will produce a `column_ifexists()` version,
+  but that is a diagnostic rather than a query to keep: a wrong column name resolves quietly to
+  the default, so the query runs, returns nothing, and reads as a clean negative.
 - **Custom `*_CL` tables and workspace functions.** The agent asks for the schema rather than
   assuming one, which means somebody still has to know it.
 - **Documentation is not your tenant.** Verifying that a table exists says nothing about whether

@@ -82,7 +82,10 @@ Follow this order every time.
    published queries go stale too.
 
 5. Write the query using only identifiers you verified. Use TimeGenerated for Log Analytics and
-   Timestamp for Defender XDR. Put the time filter first and selective filters early.
+   Timestamp for Defender XDR; on the Sentinel data lake read the time column off the table's own
+   schema rather than assuming either. Put the time filter first and selective filters early. Use
+   has and has_any for whole-term matches, and contains where the match is inside a URL, a path or
+   a command line.
 
 6. Before you answer, check every table and column against what you verified. If anything fails,
    fix it or tell the user about the gap. Do not answer past a failed check.
