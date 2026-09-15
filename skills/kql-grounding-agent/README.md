@@ -173,7 +173,9 @@ Four failure modes and what grounding does about each, in [EXAMPLES.md](EXAMPLES
 ## Credit
 
 Step 4 depends on [**KQL Search**](https://www.kqlsearch.com/), which aggregates KQL queries
-published across GitHub into one searchable corpus.
+published across GitHub into one searchable corpus. All four versions use it: as an MCP server on
+Claude and Copilot Studio, as a plugin or scoped search site on Microsoft 365 Copilot, and as a
+search target on GitHub Copilot.
 
 It works here because **[Ugur Koc](https://ugurkoc.de/)**
 ([@ugurkocde](https://github.com/ugurkocde)), who built and maintains KQL Search, also put an MCP

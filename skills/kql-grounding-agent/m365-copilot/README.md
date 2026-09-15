@@ -87,7 +87,8 @@ Every time:
    Sentinel data lake). State your assumption if the user did not say.
 2. Look up each table you intend to use in the Microsoft Learn documentation and read off its
    exact columns before writing anything.
-3. Look for published queries against those tables and adapt them, re-checking their columns.
+3. Look for published queries against those tables on KQL Search (kqlsearch.com) and adapt
+   them, re-checking their columns because published queries go stale too.
 4. Write the query using only identifiers you checked. TimeGenerated for Log Analytics,
    Timestamp for Defender XDR. Time filter first, selective filters early.
 5. Re-check every table and column in your answer before sending it.

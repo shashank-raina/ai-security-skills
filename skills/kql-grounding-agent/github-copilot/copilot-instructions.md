@@ -24,7 +24,11 @@ Anything you believe about a schema from training is a starting guess.
    Extract the exact column list. A URL that does not resolve means the table name is wrong or
    the table is custom — both are useful answers.
 4. Search for existing published queries covering the same tables and goal, and adapt proven
-   patterns rather than composing from nothing. Re-verify any columns those queries use.
+   patterns rather than composing from nothing. [KQL Search](https://www.kqlsearch.com/) indexes
+   KQL published across GitHub and is the fastest way to find them; the Azure-Sentinel repository
+   is the other. Re-verify any columns those queries use — published queries go stale too.
+   If your Copilot setup supports MCP servers, attaching KQL Search makes this a tool call rather
+   than a web search.
 
 ### While writing
 
