@@ -20,7 +20,7 @@ You are authoring KQL for Microsoft Sentinel, Log Analytics, or Defender XDR Adv
 
 | Source | How to access |
 |---|---|
-| Log Analytics / Sentinel table schemas | `web_fetch` the deterministic URL: `https://learn.microsoft.com/en-us/azure/azure-monitor/reference/tables/{TableName}` (correct casing, e.g. `SigninLogs`). Table discovery index: `https://learn.microsoft.com/en-us/azure/azure-monitor/reference/tables-index`. The **Microsoft Learn MCP server**, if connected, may also be used for grounded doc search. |
+| Log Analytics / Sentinel table schemas | `web_fetch` the deterministic URL: `https://learn.microsoft.com/en-us/azure/azure-monitor/reference/tables/{tablename}` (lowercase, e.g. `signinlogs`). Table discovery index: `https://learn.microsoft.com/en-us/azure/azure-monitor/reference/tables-index`. The **Microsoft Learn MCP server**, if connected, may also be used for grounded doc search. |
 | Defender XDR Advanced Hunting schemas | `web_fetch`: `https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-{tablename}-table` (lowercase). Table list: `https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-schema-tables`. |
 | Community query corpus | **KQL Search MCP** (`kqlsearch.com/mcp`) if connected — search by table, keyword, technique. If not connected, tell the user they can add it as a custom connector, and fall back to `web_search` scoped conceptually to kqlsearch.com and community blogs. |
 | Official Microsoft queries | Azure-Sentinel GitHub repo. Use `web_search` (e.g. `Azure-Sentinel github EmailUrlInfo hunting query`) then `web_fetch` the raw file. Key paths: `Detections/`, `Hunting Queries/`, `Solutions/{Name}/Analytic Rules/`. Rule YAML declares `requiredDataConnectors`, tactics, techniques. |
@@ -38,7 +38,7 @@ A failed lookup and a documented absence are different things. A timeout, a 403,
 6. **Self-check** the final query line by line before returning:
    - Every table is in the verified set
    - Every **source** column exists in its table's verified schema (watch XDR-vs-Sentinel column differences for dual-surface tables)
-   - Every name the query itself creates — `extend`, `summarize`, a renaming `project`, a join prefix — is defined before use in the query's own dataflow, and not shadowed later. These need no external verification; do not report them as gaps
+   - Every name the query itself creates is defined before use in the query's own dataflow and not shadowed later — `extend` results, `summarize` outputs, a renaming `project`, and the columns a join invents when both sides carry the same name, where the right-hand one returns with a numeric suffix (`Key` and `Key1`). `$left` and `$right` belong to the `on` clause and cannot be projected. These need no external verification; do not report them as gaps
    - Every operator/function is supported on the target surface
    - Dynamic columns handled per documented type (`parse_json()`, `tostring()`, `mv-expand`)
    - Correct timestamp column for the surface, never carried across: `TimeGenerated` (Log Analytics) vs `Timestamp` (Defender XDR); the Sentinel data lake reads its own — `TimeGenerated` is usual there but federated tables may lack it, and asset tables also carry `_SnapshotTime` and `_ReceivedTime`, so read it off the schema like any other column

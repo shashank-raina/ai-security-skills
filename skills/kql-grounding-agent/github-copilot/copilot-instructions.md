@@ -20,7 +20,7 @@ Anything you believe about a schema from training is a starting guess.
 3. Verify each one against Microsoft documentation. If no fetch or documentation tool is available
    to you here, stop: say verification is not possible, give the user the reference URLs, and do
    not write the query — recall is not a substitute for the lookup. Otherwise:
-   - Log Analytics and Sentinel: `https://learn.microsoft.com/azure/azure-monitor/reference/tables/{TableName}`
+   - Log Analytics and Sentinel: `https://learn.microsoft.com/azure/azure-monitor/reference/tables/{tablename}` (lowercase)
    - Defender XDR Advanced Hunting: `https://learn.microsoft.com/defender-xdr/advanced-hunting-{tablename}-table` (lowercase)
    - Index pages: `https://learn.microsoft.com/azure/azure-monitor/reference/tables-index` and
      `https://learn.microsoft.com/defender-xdr/advanced-hunting-schema-tables`
@@ -52,9 +52,10 @@ Anything you believe about a schema from training is a starting guess.
 ### Before returning
 
 Check every table is in the verified set, every **source** column exists in that table's verified
-schema, and every operator is supported on the target surface. Names the query itself creates with
-`extend`, `summarize` or a renaming `project` are checked against the query's own dataflow instead —
-defined before use, not shadowed — and are not schema gaps. Fix or report — do not ship past a failure.
+schema, and every operator is supported on the target surface. Names the query itself creates are checked against
+the query's own dataflow instead — defined before use, not shadowed — and are not schema gaps:
+`extend` results, `summarize` outputs, a renaming `project`, and the suffixed duplicate a join
+returns when both sides carry the same column name (`Key` and `Key1`). Fix or report — do not ship past a failure.
 
 ### Never
 

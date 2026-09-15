@@ -63,13 +63,13 @@ These URLs are deterministic, which is what makes the whole approach cheap enoug
 time:
 
 ```
-Log Analytics / Sentinel   https://learn.microsoft.com/azure/azure-monitor/reference/tables/{TableName}
+Log Analytics / Sentinel   https://learn.microsoft.com/azure/azure-monitor/reference/tables/{tablename}
 Defender XDR               https://learn.microsoft.com/defender-xdr/advanced-hunting-{tablename}-table
 Index pages                https://learn.microsoft.com/azure/azure-monitor/reference/tables-index
                            https://learn.microsoft.com/defender-xdr/advanced-hunting-schema-tables
 ```
 
-Note the casing: Log Analytics uses the table's own casing, Defender XDR lowercases it. The exact
+Both paths are lowercase. The exact
 column list is read off the page and recorded, along with the URL.
 
 **A 404 is not a verdict.** Learn serves one for a slug it does not recognise as readily as for a
@@ -106,8 +106,10 @@ Analytics, `Timestamp` on Defender XDR, and on the data lake whatever the table 
 - Every table is in the verified set
 - Every **source** column exists in that table's verified schema, watching for
   Defender-versus-Sentinel differences on tables that exist in both
-- Every name the query creates for itself — `extend`, `summarize`, a renaming `project` — is
-  defined before it is used and not shadowed later. Those are dataflow checks, not schema gaps
+- Every name the query creates for itself is defined before it is used and not shadowed later —
+  `extend` results, `summarize` outputs, a renaming `project`, and the suffixed duplicate a join
+  returns when both sides share a column name (`Key` and `Key1`). Those are dataflow checks, not
+  schema gaps
 - Every operator is supported on the target surface
 - The correct timestamp column is used throughout
 
