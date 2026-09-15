@@ -52,7 +52,7 @@ Two shapes, and the first is not always available.
 **With a query:**
 
 - **Query** — KQL in a code block, targeting the confirmed surface.
-- **Sources verified** — each table with its schema URL; each adapted query with its link.
+- **Sources verified** — the evidence for each identifier, named as what it is: a published table gets the schema URL you read; a custom or unpublished preview table gets the source the user supplied (schema tab, `getschema`) and no URL, because none exists — never reach for a plausible link to make the section look uniform; each adapted query gets its link.
 - **Assumptions & environment dependencies.**
 - **Notes** (optional) — performance, tuning, surface-portability caveats.
 

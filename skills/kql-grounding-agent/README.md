@@ -1,7 +1,8 @@
 # KQL Grounding Agent
 
 An agent that will not write a KQL query until it has verified every table and every column
-against Microsoft's documentation.
+against its real source: Microsoft's documentation for published tables, and your own tenant's
+schema for the ones Microsoft does not document.
 
 Built for Microsoft Sentinel, Log Analytics and Defender XDR Advanced Hunting, where the schemas
 move faster than any model's training data.
@@ -126,7 +127,9 @@ Every answer carries its provenance, so a query can be audited later or defended
 
 > **Query** — KQL targeting the confirmed surface
 >
-> **Sources verified** — each table with the schema URL that was fetched; each adapted query with
+> **Sources verified** — the evidence for each identifier, named as what it is: a documentation
+> URL for a published table, the schema you supplied for a custom one, no link invented to fill
+> the gap; each adapted query with
 > its link
 >
 > **Assumptions and environment dependencies** — custom tables, connector coverage, licence-gated
