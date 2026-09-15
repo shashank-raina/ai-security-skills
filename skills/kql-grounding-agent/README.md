@@ -75,8 +75,10 @@ column list is read off the page and recorded, along with the URL.
 
 **A resolving page is not a current table.** Retired tables keep their reference pages, columns and
 all, so the agent reads the deprecation and rename notices as part of verification rather than
-stopping at the column list. `AIAgentsInfo` is the live example: a full schema under a banner saying
-it transitions to `AgentsInfo`.
+stopping at the column list. `AIAgentsInfo` and `AgentsInfo` are the shape to expect — a superseded
+table whose reference still answers in full, under a banner naming its replacement. The dates on
+those notices get read off the page, not quoted from memory: retirements slip, and a page can sit
+past its stated date.
 
 **A 404 is not a verdict.** Learn serves one for a slug it does not recognise as readily as for a
 table that does not exist, so a 404 on its own — like a timeout or a 403 — means the lookup
