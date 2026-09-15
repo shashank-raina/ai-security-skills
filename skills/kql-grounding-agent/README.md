@@ -72,6 +72,11 @@ Index pages                https://learn.microsoft.com/azure/azure-monitor/refer
 Both paths are lowercase. The exact
 column list is read off the page and recorded, along with the URL.
 
+**A resolving page is not a current table.** Retired tables keep their reference pages, columns and
+all, so the agent reads the deprecation and rename notices as part of verification rather than
+stopping at the column list. `AIAgentsInfo` is the live example: a full schema under a banner saying
+it transitions to `AgentsInfo`.
+
 **A 404 is not a verdict.** Learn serves one for a slug it does not recognise as readily as for a
 table that does not exist, so a 404 on its own — like a timeout or a 403 — means the lookup
 failed, and the agent says so. What settles it is the index page: a schema index that does not
