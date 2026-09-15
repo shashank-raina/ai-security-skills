@@ -17,19 +17,24 @@ Anything you believe about a schema from training is a starting guess.
 1. Establish which surface the query targets: Sentinel / Log Analytics workspace, Defender XDR
    Advanced Hunting, or the Sentinel data lake. State the assumption if it is not given.
 2. List the tables you believe are relevant. These remain unverified.
-3. Verify each one against Microsoft documentation:
+3. Verify each one against Microsoft documentation. If no fetch or documentation tool is available
+   to you here, stop: say verification is not possible, give the user the reference URLs, and do
+   not write the query — recall is not a substitute for the lookup. Otherwise:
    - Log Analytics and Sentinel: `https://learn.microsoft.com/azure/azure-monitor/reference/tables/{TableName}`
    - Defender XDR Advanced Hunting: `https://learn.microsoft.com/defender-xdr/advanced-hunting-{tablename}-table` (lowercase)
    - Index pages: `https://learn.microsoft.com/azure/azure-monitor/reference/tables-index` and
      `https://learn.microsoft.com/defender-xdr/advanced-hunting-schema-tables`
-   Extract the exact column list. A fetch that fails — timeout, 403, moved template — says nothing
-   about the schema: retry once, try the index, then report the lookup as failed. A page that comes
-   back without the table means the name is wrong, the table is custom, or it is in preview with
-   nothing published yet. Say which the evidence supports.
-4. Search for existing published queries covering the same tables and goal, and adapt proven
-   patterns rather than composing from nothing. [KQL Search](https://www.kqlsearch.com/) indexes
-   KQL published across GitHub and is the fastest way to find them; the Azure-Sentinel repository
-   is the other. Re-verify any columns those queries use — published queries go stale too.
+   Extract the exact column list. A failed lookup — timeout, 403, moved template, or a 404, which
+   Learn serves for a slug it does not recognise as readily as for a table that does not exist —
+   says nothing about the schema: retry once, then go to the index. Absence is established by an
+   index you actually read that does not list the table, and then the name is wrong, the table is
+   custom, or it is in preview with nothing published yet. Say which the evidence supports.
+4. Where a search is available, look for existing published queries covering the same tables and
+   goal, and adapt proven patterns rather than composing from nothing.
+   [KQL Search](https://www.kqlsearch.com/) indexes KQL published across GitHub and is the fastest
+   way to find them; the Azure-Sentinel repository is the other. Re-verify any columns those
+   queries use — published queries go stale too. If no search is available, say the step was
+   skipped and compose from the verified schemas alone; never cite a query you did not retrieve.
    If your Copilot setup supports MCP servers, attaching KQL Search makes this a tool call rather
    than a web search.
 

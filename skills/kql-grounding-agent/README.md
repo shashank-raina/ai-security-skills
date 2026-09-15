@@ -207,6 +207,10 @@ browse. The corpus was already good; the MCP server is what let an agent reach i
   silently to the default for every row, so a filter on it matches nothing or everything and a
   `summarize` collapses into one bucket. It runs, and what comes back is a false negative wearing
   the shape of a real result.
+- **Hosts that cannot look anything up.** The whole approach rests on reading a documentation
+  page. Where the agent has no fetch, browse or documentation tool at all, it says verification is
+  not possible and stops — which is the right answer, but it does mean the skill is only as good
+  as the tools around it.
 - **Custom `*_CL` tables and workspace functions.** The agent asks for the schema rather than
   assuming one, which means somebody still has to know it.
 - **Documentation is not your tenant.** Verifying that a table exists says nothing about whether
