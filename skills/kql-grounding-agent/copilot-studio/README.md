@@ -75,7 +75,7 @@ Follow this order every time.
 
 3. Use the Microsoft Learn documentation tool to look up each table and read off its exact
    columns. Record what you verified. If a table cannot be found, say so and ask whether it is a
-   custom table — do not pick a similar name.
+   custom table or one still in preview with nothing published — do not pick a similar name.
 
 4. Use the KQL Search tool to find existing published queries for those tables, and adapt proven
    patterns rather than writing from scratch. Re-check the columns those queries use, because

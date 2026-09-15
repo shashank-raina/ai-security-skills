@@ -26,13 +26,13 @@ You are authoring KQL for Microsoft Sentinel, Log Analytics, or Defender XDR Adv
 | Official Microsoft queries | Azure-Sentinel GitHub repo. Use `web_search` (e.g. `Azure-Sentinel github EmailUrlInfo hunting query`) then `web_fetch` the raw file. Key paths: `Detections/`, `Hunting Queries/`, `Solutions/{Name}/Analytic Rules/`. Rule YAML declares `requiredDataConnectors`, tactics, techniques. |
 | KQL language reference | `web_fetch` `https://learn.microsoft.com/en-us/kusto/query/{operator-name}` if unsure an operator/function exists or is supported in Log Analytics (some Kusto features are ADX-only). |
 
-Fetching a URL that 404s is *signal*, not failure — it means the table name is wrong or custom. Use it.
+Fetching a URL that 404s is *signal*, not failure. It means one of three things: the name is wrong, the table is custom to the tenant, or the table is in preview with no reference published yet. Say which the evidence supports; where nothing distinguishes them, report the schema as unavailable rather than picking one.
 
 ## Mandatory workflow (in order, no skipping)
 
 1. **Clarify intent.** Goal, query surface (Sentinel workspace vs Defender XDR vs both), time window, stated constraints. Ask only if genuinely ambiguous; otherwise state your interpretation as an assumption.
 2. **Resolve candidate tables.** List tables you believe are relevant; note which surface each belongs to. Still hypothetical.
-3. **Verify schemas.** Fetch each table's reference page. Extract the exact columns you intend to use; record the URL. On 404: check the index pages for the correct name; if unresolved, ask whether it's a custom `*_CL` table and request its schema from the user. Custom tables/workspace functions proceed only on user-supplied schema, marked environment-dependent.
+3. **Verify schemas.** Fetch each table's reference page. Extract the exact columns you intend to use; record the URL. On 404: check the index pages for the correct name. If the name is in the index but the page is missing, treat the schema as unpublished, not wrong. If it is nowhere, ask whether it's a custom `*_CL` table and request its schema from the user. Custom tables, workspace functions and unpublished preview tables proceed only on user-supplied schema, marked environment-dependent.
 4. **Retrieve prior art.** Query KQL Search MCP and the Azure-Sentinel repo for the verified tables + goal keywords. Re-verify any columns the found queries use before adapting — community queries can be stale.
 5. **Compose.** Use only verified identifiers. Style: time filter first, high-selectivity `where` early, `has`/`has_any` over `contains` where possible, explicit join kinds, explicit final `project`, `//` comments on non-obvious logic, entity-mappable columns surfaced for detections.
 6. **Self-check** the final query line by line before returning:
@@ -57,5 +57,5 @@ Fetching a URL that 404s is *signal*, not failure — it means the table name is
 - **Column not in verified schema:** don't use it; offer the nearest verified alternative.
 - **No prior art:** state the query is novel, composed purely from verified schemas; recommend validation against live data before operationalising.
 - **Source conflict:** Microsoft Learn schema pages win over community and repo content; note the conflict.
-- **User insists on an unverified identifier:** include it only with an inline `// UNVERIFIED` comment and list it in assumptions.
+- **User insists on an unverified identifier:** their assertion is the source, and it is weaker than documentation. Include it only with an inline `// UNVERIFIED` comment, and record in the assumptions that the user supplied it. Never put an unverified identifier in on your own initiative — an annotated guess is still a guess, and the query outlives the annotation once it is copied.
 - **Cross-surface request:** verify on both surfaces; produce two variants or restrict to the column intersection.

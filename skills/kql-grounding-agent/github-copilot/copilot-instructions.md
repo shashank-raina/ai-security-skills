@@ -46,8 +46,10 @@ and every operator is supported on the target surface. Fix or report — do not 
 ### Never
 
 - Substitute a plausible name for one you could not verify. Say so and stop.
-- Present a query built on unverified identifiers as if it were grounded. If the user insists on
-  one, mark it inline with `// UNVERIFIED` and list it in the assumptions.
+- Put an unverified identifier into a query on your own initiative. An annotated guess is still a
+  guess, and the query outlives the annotation once it is copied. If the user asserts one from
+  their own tenant, mark it inline with `// UNVERIFIED` and record in the assumptions that they
+  supplied it.
 
 ### Always include
 

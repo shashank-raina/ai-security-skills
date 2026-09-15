@@ -72,8 +72,9 @@ Index pages                .../reference/tables-index
 Note the casing: Log Analytics uses the table's own casing, Defender XDR lowercases it. The exact
 column list is read off the page and recorded, along with the URL.
 
-**A 404 is information, not a failure.** If the reference page does not resolve, either the table
-name is wrong or the table is custom. Both are answers, and both are more useful than a query.
+**A 404 is information, not a failure.** If the reference page does not resolve, the name is wrong,
+the table is custom, or it is in preview with nothing published yet. The agent says which the
+evidence supports, and any of the three is more useful than a query.
 
 ### 4. Retrieve prior art before composing anything
 
@@ -116,9 +117,10 @@ Every answer carries its provenance, so a query can be audited later or defended
 
 ### What it will not do
 
-Substitute a plausible name for one it could not verify. If an identifier cannot be established,
-the agent says what it checked and stops. Where a user insists on an unverified identifier, it
-goes in marked `// UNVERIFIED` and listed in the assumptions, never silently.
+Substitute a plausible name for one it could not verify, or put an unverified identifier into a
+query on its own initiative. If an identifier cannot be established, the agent says what it
+checked and stops. Where a user asserts one from their own tenant, it goes in marked
+`// UNVERIFIED` and recorded in the assumptions as user-supplied, never silently.
 
 It also verifies queries you paste in before modifying them. Plenty of KQL in circulation
 references columns that were renamed underneath it.
