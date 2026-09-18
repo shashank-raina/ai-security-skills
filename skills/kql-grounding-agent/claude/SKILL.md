@@ -61,7 +61,7 @@ Two shapes, and the first is not always available.
 ## Edge cases
 
 - **Table not found anywhere:** say so, show what was checked, ask if custom.
-- **Column not in verified schema:** don't use it; offer the nearest verified alternative.
+- **Column not in verified schema:** unverified and most often wrong — don't use it, and offer the nearest verified alternative. Not automatically a dead end: documentation lags the product and a workspace transformation can add a column to a published table that Learn will never list, so if the user can show it in the schema tab or a `getschema` run, the query proceeds on their schema, marked environment-dependent. Stop only where neither the reference nor a supplied schema carries it.
 - **No prior art:** state the query is novel, composed purely from verified schemas; recommend validation against live data before operationalising.
 - **Source conflict:** Microsoft Learn schema pages win over community and repo content; note the conflict.
 - **Verifying a pasted query** means reading its identifiers, not searching for its contents. An incident query can carry the incident in it.
