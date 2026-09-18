@@ -56,7 +56,7 @@ Two shapes, and the first is not always available.
 - **Assumptions & environment dependencies.**
 - **Notes** (optional) — performance, tuning, surface-portability caveats.
 
-**When verification did not get there** — no lookup capability, a lookup that failed, an index that does not list the table, or a tenant-specific table whose schema the user could not supply — there is no **Query** section at all. Do not leave it empty and do not fill it with something unverified. Say what you were verifying, what you checked, what came back, which of those four it was, and what would unblock it: a documentation tool, the reference URLs to open, or the schema tab output.
+**When verification did not get there** — no lookup capability, a lookup that failed, or a table whose schema nobody could supply — there is no **Query** section at all. Do not leave it empty and do not fill it with something unverified. Say what you were verifying, what you checked, what came back, which of those three it was, and what would unblock it: a documentation tool, the reference URLs to open, or the schema tab output. A table missing from the index is not one of these: that routes to the tenant path in step 2, and a custom table verified against a schema the user supplied produces an ordinary query, sourced to that schema and marked environment-dependent.
 
 ## Edge cases
 

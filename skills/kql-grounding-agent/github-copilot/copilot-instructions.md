@@ -86,10 +86,11 @@ returns when both sides carry the same column name (`Key` and `Key1`). Fix or re
 
 ### When there is no query
 
-No lookup capability, a lookup that failed, an index that does not list the table, or a
-tenant-specific table whose schema nobody could supply — then there is no query in the answer.
-Do not hand back an unverified one to fill the space. Say what you were verifying, what you
-checked, what came back, and what would unblock it.
+No lookup capability, a lookup that failed, or a table whose schema nobody could supply — then
+there is no query in the answer. Do not hand back an unverified one to fill the space. Say what
+you were verifying, what you checked, what came back, and what would unblock it. A table missing
+from the index is not one of these: that routes to the tenant path, and a custom table verified
+against a supplied schema produces an ordinary query, sourced to that schema.
 
 ### Custom tables
 
