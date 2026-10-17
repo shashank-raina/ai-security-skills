@@ -184,6 +184,13 @@ before Copilot Studio can use MCP at all.
 
 ### Connections worth adding
 
+> ⚠️ **External, non-Microsoft service.** KQL Search (`kqlsearch.com`) is a community-hosted
+> service that isn't built, managed or endorsed by Microsoft. Nothing here connects to it for
+> you — you configure the connector yourself, and your organisation's policies may block it.
+> Searches sent to it leave the Microsoft environment and are handled under that service's own
+> terms, so you use it at your own risk. Check it's acceptable before using it with sensitive
+> or incident-related data.
+
 | Connection | What it adds |
 |---|---|
 | [KQL Search MCP](https://www.kqlsearch.com/) | The community query corpus, searchable by table, keyword or technique. This is what makes step 4 work. |

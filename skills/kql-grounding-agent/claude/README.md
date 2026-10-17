@@ -35,7 +35,7 @@ ones that never say "KQL" — *"find agents running on laptops in Defender"* is 
 | Server | What it adds |
 |---|---|
 | **Microsoft Learn MCP** | Grounded documentation search alongside direct page fetches. |
-| **KQL Search MCP** (`https://www.kqlsearch.com/mcp`) | The community corpus for the prior-art step. |
+| **KQL Search MCP** (`https://www.kqlsearch.com/mcp`) | The community corpus for the prior-art step. **External, community-run — not a Microsoft service.** Searches leave the Microsoft environment; check it is acceptable before using it on sensitive or incident data. |
 
 Without them the skill still works — it falls back to fetching documentation URLs directly — but
 the prior-art step gets thin.

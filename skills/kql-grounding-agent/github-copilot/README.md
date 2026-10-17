@@ -36,6 +36,10 @@ The instructions point at [KQL Search](https://www.kqlsearch.com/) for published
 Copilot setup supports MCP servers, attaching KQL Search turns that step into a tool call instead
 of a web search, which is a meaningful upgrade.
 
+KQL Search is community-run and not a Microsoft service. Searches sent to it leave the Microsoft
+environment under that service's own terms, and your organisation's policies may block the
+connector — check it is acceptable before using it on sensitive or incident data.
+
 ## Checking it is working
 
 Ask for a query and look at the References list on the answer. If `copilot-instructions.md` is not

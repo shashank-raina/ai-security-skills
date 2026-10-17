@@ -27,7 +27,7 @@ verification step falls over. Settings → generative orchestration.
 | Server | Why |
 |---|---|
 | **Microsoft Learn Docs MCP** | Schema verification. This is the one that makes grounding real — the agent looks up table and column references rather than searching for them. |
-| **KQL Search** (`https://www.kqlsearch.com/mcp`) | The community query corpus, for the prior-art step. |
+| **KQL Search** (`https://www.kqlsearch.com/mcp`) | The community query corpus, for the prior-art step. **External, community-run — not a Microsoft service.** Searches leave the Microsoft environment and your tenant policies may block the connector; check it is acceptable before using it on sensitive or incident data. |
 
 For a server not in the prebuilt list, use **New tool** → **Model Context Protocol** and supply the
 server name, a one-or-two sentence description, the HTTPS endpoint, and the auth method. The
